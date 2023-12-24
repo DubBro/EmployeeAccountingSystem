@@ -8,6 +8,8 @@
             CreateMap<DepartmentEntity, DepartmentDTO>();
             CreateMap<PositionEntity, PositionDTO>();
             CreateMap<EmployeeEntity, EmployeeDTO>();
+
+            CreateMap<CompanyDTO, CompanyViewModel>();
         }
     }
 }
