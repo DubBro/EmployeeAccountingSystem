@@ -9,7 +9,7 @@
             _connectionString = options.Value.ConnectionString;
         }
 
-        public async Task<CompanyDTO> GetAsync(int id = 1)
+        public async Task<CompanyEntity> GetAsync(int id = 1)
         {
             string query = "SELECT * FROM Company WHERE Id = @id";
 
@@ -27,10 +27,10 @@
 
                 if (ds.Tables[0].Rows.Count == 0)
                 {
-                    return new CompanyDTO();
+                    return new CompanyEntity();
                 }
 
-                return new CompanyDTO
+                return new CompanyEntity
                 {
                     Id = (int)ds.Tables[0].Rows[0]["Id"],
                     Name = (string)ds.Tables[0].Rows[0]["Name"],

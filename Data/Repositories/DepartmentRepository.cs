@@ -9,7 +9,7 @@
             _connectionString = options.Value.ConnectionString;
         }
 
-        public async Task<DepartmentDTO> GetAsync(int id)
+        public async Task<DepartmentEntity> GetAsync(int id)
         {
             string query = "SELECT * FROM Department WHERE Id = @id";
 
@@ -27,10 +27,10 @@
 
                 if (ds.Tables[0].Rows.Count == 0)
                 {
-                    return new DepartmentDTO();
+                    return new DepartmentEntity();
                 }
 
-                return new DepartmentDTO()
+                return new DepartmentEntity()
                 {
                     Id = (int)ds.Tables[0].Rows[0]["Id"],
                     Name = (string)ds.Tables[0].Rows[0]["Name"],
@@ -39,7 +39,7 @@
             }
         }
 
-        public async Task<IList<DepartmentDTO>> ListAsync()
+        public async Task<IList<DepartmentEntity>> ListAsync()
         {
             string query = "SELECT * FROM Department";
 
@@ -53,14 +53,14 @@
 
                 if (ds.Tables[0].Rows.Count == 0)
                 {
-                    return new List<DepartmentDTO>();
+                    return new List<DepartmentEntity>();
                 }
 
-                var result = new List<DepartmentDTO>();
+                List<DepartmentEntity> result = new List<DepartmentEntity>();
 
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    var item = new DepartmentDTO()
+                    var item = new DepartmentEntity()
                     {
                         Id = (int)ds.Tables[0].Rows[i]["Id"],
                         Name = (string)ds.Tables[0].Rows[i]["Name"],

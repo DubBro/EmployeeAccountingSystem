@@ -2,6 +2,6 @@
 {
     public interface ICompanyRepository
     {
-        Task<CompanyDTO> GetAsync(int id = 1);
+        Task<CompanyEntity> GetAsync(int id = 1);
     }
 }

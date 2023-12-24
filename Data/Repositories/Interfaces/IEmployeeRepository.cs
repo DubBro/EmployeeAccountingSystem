@@ -2,11 +2,11 @@
 {
     public interface IEmployeeRepository
     {
-        Task<EmployeeDTO> GetAsync(int id);
-        Task<IList<EmployeeDTO>> ListAsync();
-        Task<IList<EmployeeDTO>> ListFilteredAsync(Filter filter);
-        Task<int> AddAsync(EmployeeDTO employeeDTO);
-        Task<int> UpdateAsync(EmployeeDTO employeeDTO);
+        Task<EmployeeEntity> GetAsync(int id);
+        Task<IList<EmployeeEntity>> ListAsync();
+        Task<IList<EmployeeEntity>> ListFilteredAsync(Filter filter);
+        Task<int> AddAsync(EmployeeEntity employeeEntity);
+        Task<int> UpdateAsync(EmployeeEntity employeeEntity);
         Task<int> DeleteAsync(int id);
     }
 }

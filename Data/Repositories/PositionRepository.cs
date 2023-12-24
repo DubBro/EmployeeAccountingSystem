@@ -9,7 +9,7 @@
             _connectionString = options.Value.ConnectionString;
         }
 
-        public async Task<PositionDTO> GetAsync(int id)
+        public async Task<PositionEntity> GetAsync(int id)
         {
             string query = "SELECT * FROM Position WHERE Id = @id";
 
@@ -27,10 +27,10 @@
 
                 if (ds.Tables[0].Rows.Count == 0)
                 {
-                    return new PositionDTO();
+                    return new PositionEntity();
                 }
 
-                return new PositionDTO()
+                return new PositionEntity()
                 {
                     Id = (int)ds.Tables[0].Rows[0]["Id"],
                     Name = (string)ds.Tables[0].Rows[0]["Name"],
@@ -39,7 +39,7 @@
             }
         }
 
-        public async Task<IList<PositionDTO>> ListAsync()
+        public async Task<IList<PositionEntity>> ListAsync()
         {
             string query = "SELECT * FROM Position";
 
@@ -53,14 +53,14 @@
 
                 if (ds.Tables[0].Rows.Count == 0)
                 {
-                    return new List<PositionDTO>();
+                    return new List<PositionEntity>();
                 }
 
-                var result = new List<PositionDTO>();
+                List<PositionEntity> result = new List<PositionEntity>();
 
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    var item = new PositionDTO()
+                    var item = new PositionEntity()
                     {
                         Id = (int)ds.Tables[0].Rows[i]["Id"],
                         Name = (string)ds.Tables[0].Rows[i]["Name"],

@@ -9,7 +9,7 @@
             _connectionString = options.Value.ConnectionString;
         }
 
-        public async Task<EmployeeDTO> GetAsync(int id)
+        public async Task<EmployeeEntity> GetAsync(int id)
         {
             string query = "SELECT " +
                                 "e.Id, e.FirstName, e.LastName, e.MiddleName, e.BirthDate, " +
@@ -34,10 +34,10 @@
 
                 if (ds.Tables[0].Rows.Count == 0)
                 {
-                    return new EmployeeDTO();
+                    return new EmployeeEntity();
                 }
 
-                return new EmployeeDTO
+                return new EmployeeEntity
                 {
                     Id = (int)ds.Tables[0].Rows[0]["Id"],
                     FirstName = (string)ds.Tables[0].Rows[0]["FirstName"],
@@ -58,7 +58,7 @@
             }
         }
 
-        public async Task<IList<EmployeeDTO>> ListAsync()
+        public async Task<IList<EmployeeEntity>> ListAsync()
         {
             string query = "SELECT " +
                                 "e.Id, e.FirstName, e.LastName, e.MiddleName, e.BirthDate, " +
@@ -78,14 +78,14 @@
 
                 if (ds.Tables[0].Rows.Count == 0)
                 {
-                    return new List<EmployeeDTO>();
+                    return new List<EmployeeEntity>();
                 }
 
-                List<EmployeeDTO> result = new List<EmployeeDTO>();
+                List<EmployeeEntity> result = new List<EmployeeEntity>();
 
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    var item = new EmployeeDTO()
+                    var item = new EmployeeEntity()
                     {
                         Id = (int)ds.Tables[0].Rows[i]["Id"],
                         FirstName = (string)ds.Tables[0].Rows[i]["FirstName"],
@@ -111,7 +111,7 @@
             }
         }
 
-        public async Task<IList<EmployeeDTO>> ListFilteredAsync(Filter filter)
+        public async Task<IList<EmployeeEntity>> ListFilteredAsync(Filter filter)
         {
             StringBuilder query = new StringBuilder("SELECT " +
                                                         "e.Id, e.FirstName, e.LastName, e.MiddleName, e.BirthDate, " +
@@ -223,14 +223,14 @@
 
                 if (ds.Tables[0].Rows.Count == 0)
                 {
-                    return new List<EmployeeDTO>();
+                    return new List<EmployeeEntity>();
                 }
 
-                List<EmployeeDTO> result = new List<EmployeeDTO>();
+                List<EmployeeEntity> result = new List<EmployeeEntity>();
 
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    var item = new EmployeeDTO()
+                    var item = new EmployeeEntity()
                     {
                         Id = (int)ds.Tables[0].Rows[i]["Id"],
                         FirstName = (string)ds.Tables[0].Rows[i]["FirstName"],
@@ -256,7 +256,7 @@
             }
         }
 
-        public async Task<int> AddAsync(EmployeeDTO employeeDTO)
+        public async Task<int> AddAsync(EmployeeEntity employeeEntity)
         {
             string query = "INSERT INTO Employee " +
                                 "(FirstName, LastName, MiddleName, BirthDate, Country, City, " +
@@ -277,40 +277,40 @@
 
                 try
                 {
-                    SqlParameter paramFirstName = new SqlParameter("@firstName", employeeDTO.FirstName);
+                    SqlParameter paramFirstName = new SqlParameter("@firstName", employeeEntity.FirstName);
                     command.Parameters.Add(paramFirstName);
 
-                    SqlParameter paramLastName = new SqlParameter("@lastName", employeeDTO.LastName);
+                    SqlParameter paramLastName = new SqlParameter("@lastName", employeeEntity.LastName);
                     command.Parameters.Add(paramLastName);
 
-                    SqlParameter paramMiddleName = new SqlParameter("@middleName", employeeDTO.MiddleName);
+                    SqlParameter paramMiddleName = new SqlParameter("@middleName", employeeEntity.MiddleName);
                     command.Parameters.Add(paramMiddleName);
 
-                    SqlParameter paramBirthDate = new SqlParameter("@birthDate", employeeDTO.BirthDate);
+                    SqlParameter paramBirthDate = new SqlParameter("@birthDate", employeeEntity.BirthDate);
                     command.Parameters.Add(paramBirthDate);
 
-                    SqlParameter paramCountry = new SqlParameter("@country", (employeeDTO.Country == null) ? DBNull.Value : employeeDTO.Country);
+                    SqlParameter paramCountry = new SqlParameter("@country", (employeeEntity.Country == null) ? DBNull.Value : employeeEntity.Country);
                     command.Parameters.Add(paramCountry);
 
-                    SqlParameter paramCity = new SqlParameter("@city", (employeeDTO.City == null) ? DBNull.Value : employeeDTO.City);
+                    SqlParameter paramCity = new SqlParameter("@city", (employeeEntity.City == null) ? DBNull.Value : employeeEntity.City);
                     command.Parameters.Add(paramCity);
 
-                    SqlParameter paramAddress = new SqlParameter("@address", (employeeDTO.Address == null) ? DBNull.Value : employeeDTO.Address);
+                    SqlParameter paramAddress = new SqlParameter("@address", (employeeEntity.Address == null) ? DBNull.Value : employeeEntity.Address);
                     command.Parameters.Add(paramAddress);
 
-                    SqlParameter paramPhone = new SqlParameter("@phone", (employeeDTO.Phone == null) ? DBNull.Value : employeeDTO.Phone);
+                    SqlParameter paramPhone = new SqlParameter("@phone", (employeeEntity.Phone == null) ? DBNull.Value : employeeEntity.Phone);
                     command.Parameters.Add(paramPhone);
 
-                    SqlParameter paramHireDate = new SqlParameter("@hireDate", employeeDTO.HireDate);
+                    SqlParameter paramHireDate = new SqlParameter("@hireDate", employeeEntity.HireDate);
                     command.Parameters.Add(paramHireDate);
 
-                    SqlParameter paramSalary = new SqlParameter("@salary", employeeDTO.Salary);
+                    SqlParameter paramSalary = new SqlParameter("@salary", employeeEntity.Salary);
                     command.Parameters.Add(paramSalary);
 
-                    SqlParameter paramDepartmentId = new SqlParameter("@departmentId", employeeDTO.DepartmentId);
+                    SqlParameter paramDepartmentId = new SqlParameter("@departmentId", employeeEntity.DepartmentId);
                     command.Parameters.Add(paramDepartmentId);
 
-                    SqlParameter paramPositionId = new SqlParameter("@positionId", employeeDTO.PositionId);
+                    SqlParameter paramPositionId = new SqlParameter("@positionId", employeeEntity.PositionId);
                     command.Parameters.Add(paramPositionId);
 
                     var result = await command.ExecuteScalarAsync();
@@ -327,7 +327,7 @@
             }
         }
 
-        public async Task<int> UpdateAsync(EmployeeDTO employeeDTO)
+        public async Task<int> UpdateAsync(EmployeeEntity employeeEntity)
         {
             string query = "UPDATE Employee SET " +
                                 "FirstName = @firstName, LastName = @lastName, MiddleName = @middleName, BirthDate = @birthDate, " +
@@ -347,43 +347,43 @@
 
                 try
                 {
-                    SqlParameter paramId = new SqlParameter("@id", employeeDTO.Id);
+                    SqlParameter paramId = new SqlParameter("@id", employeeEntity.Id);
                     command.Parameters.Add(paramId);
 
-                    SqlParameter paramFirstName = new SqlParameter("@firstName", employeeDTO.FirstName);
+                    SqlParameter paramFirstName = new SqlParameter("@firstName", employeeEntity.FirstName);
                     command.Parameters.Add(paramFirstName);
 
-                    SqlParameter paramLastName = new SqlParameter("@lastName", employeeDTO.LastName);
+                    SqlParameter paramLastName = new SqlParameter("@lastName", employeeEntity.LastName);
                     command.Parameters.Add(paramLastName);
 
-                    SqlParameter paramMiddleName = new SqlParameter("@middleName", employeeDTO.MiddleName);
+                    SqlParameter paramMiddleName = new SqlParameter("@middleName", employeeEntity.MiddleName);
                     command.Parameters.Add(paramMiddleName);
 
-                    SqlParameter paramBirthDate = new SqlParameter("@birthDate", employeeDTO.BirthDate);
+                    SqlParameter paramBirthDate = new SqlParameter("@birthDate", employeeEntity.BirthDate);
                     command.Parameters.Add(paramBirthDate);
 
-                    SqlParameter paramCountry = new SqlParameter("@country", (employeeDTO.Country == null) ? DBNull.Value : employeeDTO.Country);
+                    SqlParameter paramCountry = new SqlParameter("@country", (employeeEntity.Country == null) ? DBNull.Value : employeeEntity.Country);
                     command.Parameters.Add(paramCountry);
 
-                    SqlParameter paramCity = new SqlParameter("@city", (employeeDTO.City == null) ? DBNull.Value : employeeDTO.City);
+                    SqlParameter paramCity = new SqlParameter("@city", (employeeEntity.City == null) ? DBNull.Value : employeeEntity.City);
                     command.Parameters.Add(paramCity);
 
-                    SqlParameter paramAddress = new SqlParameter("@address", (employeeDTO.Address == null) ? DBNull.Value : employeeDTO.Address);
+                    SqlParameter paramAddress = new SqlParameter("@address", (employeeEntity.Address == null) ? DBNull.Value : employeeEntity.Address);
                     command.Parameters.Add(paramAddress);
 
-                    SqlParameter paramPhone = new SqlParameter("@phone", (employeeDTO.Phone == null) ? DBNull.Value : employeeDTO.Phone);
+                    SqlParameter paramPhone = new SqlParameter("@phone", (employeeEntity.Phone == null) ? DBNull.Value : employeeEntity.Phone);
                     command.Parameters.Add(paramPhone);
 
-                    SqlParameter paramHireDate = new SqlParameter("@hireDate", employeeDTO.HireDate);
+                    SqlParameter paramHireDate = new SqlParameter("@hireDate", employeeEntity.HireDate);
                     command.Parameters.Add(paramHireDate);
 
-                    SqlParameter paramSalary = new SqlParameter("@salary", employeeDTO.Salary);
+                    SqlParameter paramSalary = new SqlParameter("@salary", employeeEntity.Salary);
                     command.Parameters.Add(paramSalary);
 
-                    SqlParameter paramDepartmentId = new SqlParameter("@departmentId", employeeDTO.DepartmentId);
+                    SqlParameter paramDepartmentId = new SqlParameter("@departmentId", employeeEntity.DepartmentId);
                     command.Parameters.Add(paramDepartmentId);
 
-                    SqlParameter paramPositionId = new SqlParameter("@positionId", employeeDTO.PositionId);
+                    SqlParameter paramPositionId = new SqlParameter("@positionId", employeeEntity.PositionId);
                     command.Parameters.Add(paramPositionId);
 
                     var result = await command.ExecuteScalarAsync();

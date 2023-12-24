@@ -1,4 +1,4 @@
-﻿namespace EmployeeAccountingSystem.Models
+﻿namespace EmployeeAccountingSystem.Data.Entities
 {
     public class Filter
     {

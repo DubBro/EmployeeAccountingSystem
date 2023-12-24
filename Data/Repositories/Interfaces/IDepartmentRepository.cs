@@ -2,7 +2,7 @@
 {
     public interface IDepartmentRepository
     {
-        Task<DepartmentDTO> GetAsync(int id);
-        Task<IList<DepartmentDTO>> ListAsync();
+        Task<DepartmentEntity> GetAsync(int id);
+        Task<IList<DepartmentEntity>> ListAsync();
     }
 }
