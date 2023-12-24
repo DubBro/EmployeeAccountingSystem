@@ -6,5 +6,8 @@ global using EmployeeAccountingSystem.Data.Repositories;
 global using EmployeeAccountingSystem.Data.Entities;
 global using EmployeeAccountingSystem.Models.DTOs;
 global using EmployeeAccountingSystem.Models;
+global using EmployeeAccountingSystem.Services.Interfaces;
+global using EmployeeAccountingSystem.Services;
 global using Microsoft.Data.SqlClient;
 global using Microsoft.Extensions.Options;
+global using AutoMapper;
