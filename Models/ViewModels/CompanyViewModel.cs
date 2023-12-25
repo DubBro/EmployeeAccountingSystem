@@ -1,4 +1,4 @@
-﻿namespace EmployeeAccountingSystem.Models.ViewModels.Responses
+﻿namespace EmployeeAccountingSystem.Models.ViewModels
 {
     public class CompanyViewModel
     {

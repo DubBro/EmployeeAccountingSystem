@@ -1,10 +1,10 @@
 USE EmployeeAccountingDb
 GO
 
-INSERT INTO Company (Name, Description) VALUES ('Microsoft', 'Microsoft Corporation is an American multinational technology corporation headquartered in Redmond, Washington. 
-                                                                Microsoft ranked No. 14 in the 2022 Fortune 500 rankings of the largest United States corporations by total revenue.
-                                                                It is considered one of the Big Five American information technology companies, 
-                                                                alongside Alphabet (parent company of Google), Amazon, Apple, and Meta.')
+INSERT INTO Company (Name, Description) VALUES ('Microsoft', 'Microsoft Corporation is an American multinational technology corporation headquartered in Redmond, Washington. ' + 
+                                                                'Microsoft ranked No. 14 in the 2022 Fortune 500 rankings of the largest United States corporations by total revenue. ' + 
+                                                                'It is considered one of the Big Five American information technology companies, ' + 
+                                                                'alongside Alphabet (parent company of Google), Amazon, Apple, and Meta.')
 
 INSERT INTO Position (Name) VALUES ('Team Lead'), ('Architect'), ('.NET Developer'), ('SQL Developer'), ('C++ Developer')
 

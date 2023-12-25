@@ -71,22 +71,43 @@ namespace EmployeeAccountingSystem.Services
             Regex wordPattern = new Regex("^[a-zA-Z- ]+$");
             Regex phonePattern = new Regex("^[+][0-9]{10,12}$");
 
-            employeeDTO.FirstName = employeeDTO.FirstName.Trim();
-            if (string.IsNullOrWhiteSpace(employeeDTO.FirstName) || !wordPattern.IsMatch(employeeDTO.FirstName) || employeeDTO.FirstName.Length > 50)
+            if (string.IsNullOrWhiteSpace(employeeDTO.FirstName))
             {
                 throw new ArgumentException(nameof(employeeDTO.FirstName));
             }
+            else
+            {
+                employeeDTO.FirstName = employeeDTO.FirstName.Trim();
+                if (!wordPattern.IsMatch(employeeDTO.FirstName) || employeeDTO.FirstName.Length > 50)
+                {
+                    throw new ArgumentException(nameof(employeeDTO.FirstName));
+                }
+            }
 
-            employeeDTO.LastName = employeeDTO.LastName.Trim();
-            if (string.IsNullOrWhiteSpace(employeeDTO.LastName) || !wordPattern.IsMatch(employeeDTO.LastName) || employeeDTO.LastName.Length > 50)
+            if (string.IsNullOrWhiteSpace(employeeDTO.LastName))
             {
                 throw new ArgumentException(nameof(employeeDTO.LastName));
             }
+            else
+            {
+                employeeDTO.LastName = employeeDTO.LastName.Trim();
+                if (!wordPattern.IsMatch(employeeDTO.LastName) || employeeDTO.LastName.Length > 50)
+                {
+                    throw new ArgumentException(nameof(employeeDTO.LastName));
+                }
+            }
 
-            employeeDTO.MiddleName = employeeDTO.MiddleName.Trim();
-            if (string.IsNullOrWhiteSpace(employeeDTO.MiddleName) || !wordPattern.IsMatch(employeeDTO.MiddleName) || employeeDTO.MiddleName.Length > 50)
+            if (string.IsNullOrWhiteSpace(employeeDTO.MiddleName))
             {
                 throw new ArgumentException(nameof(employeeDTO.MiddleName));
+            }
+            else
+            {
+                employeeDTO.MiddleName = employeeDTO.MiddleName.Trim();
+                if (!wordPattern.IsMatch(employeeDTO.MiddleName) || employeeDTO.MiddleName.Length > 50)
+                {
+                    throw new ArgumentException(nameof(employeeDTO.MiddleName));
+                }
             }
 
             if (employeeDTO.BirthDate <= new DateTime(1950, 1, 1) || employeeDTO.BirthDate >= new DateTime(2010, 1, 1))
