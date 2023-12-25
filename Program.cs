@@ -11,7 +11,10 @@ builder.Services.AddTransient<IPositionRepository, PositionRepository>();
 builder.Services.AddTransient<ICompanyRepository, CompanyRepository>();
 builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
 
+builder.Services.AddTransient<IDepartmentService, DepartmentService>();
+builder.Services.AddTransient<IPositionService, PositionService>();
 builder.Services.AddTransient<ICompanyService, CompanyService>();
+builder.Services.AddTransient<IEmployeeService, EmployeeService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 
