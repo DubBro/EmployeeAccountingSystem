@@ -22,5 +22,11 @@
             var result = await _departmentRepository.ListAsync();
             return result.Select(d => _mapper.Map<DepartmentDTO>(d)).ToList();
         }
+
+        public async Task<IList<DepartmentInfoDTO>> ListDepartmentsInfoAsync()
+        {
+            var result = await _departmentRepository.ListDepartmentsInfoAsync();
+            return result.Select(d => _mapper.Map<DepartmentInfoDTO>(d)).ToList();
+        }
     }
 }

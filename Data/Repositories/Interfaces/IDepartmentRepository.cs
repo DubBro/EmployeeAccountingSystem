@@ -4,5 +4,6 @@
     {
         Task<DepartmentEntity> GetAsync(int id);
         Task<IList<DepartmentEntity>> ListAsync();
+        Task<IList<DepartmentInfo>> ListDepartmentsInfoAsync();
     }
 }
