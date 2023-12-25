@@ -1,6 +1,6 @@
 ﻿namespace EmployeeAccountingSystem.Data.Entities
 {
-    public class Filter
+    public class EmployeeFilter
     {
         public string? Name { get; set; }
         public string? Country { get; set; }

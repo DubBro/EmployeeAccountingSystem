@@ -111,7 +111,7 @@
             }
         }
 
-        public async Task<IList<EmployeeEntity>> ListFilteredAsync(Filter filter)
+        public async Task<IList<EmployeeEntity>> ListFilteredAsync(EmployeeFilter filter)
         {
             StringBuilder query = new StringBuilder("SELECT " +
                                                         "e.Id, e.FirstName, e.LastName, e.MiddleName, e.BirthDate, " +
@@ -124,7 +124,7 @@
             List<StringBuilder> filters = new List<StringBuilder>();
             List<SqlParameter> sqlParams = new List<SqlParameter>();
 
-            if (!string.IsNullOrEmpty(filter.Name))
+            if (!string.IsNullOrWhiteSpace(filter.Name))
             {
                 StringBuilder fltr = new StringBuilder("(e.FirstName LIKE @name OR e.LastName LIKE @name OR e.MiddleName LIKE @name)");
                 filters.Add(fltr);
@@ -133,7 +133,7 @@
                 sqlParams.Add(param);
             }
 
-            if (!string.IsNullOrEmpty(filter.Country))
+            if (!string.IsNullOrWhiteSpace(filter.Country))
             {
                 StringBuilder fltr = new StringBuilder("e.Country = @country");
                 filters.Add(fltr);
@@ -142,7 +142,7 @@
                 sqlParams.Add(param);
             }
 
-            if (!string.IsNullOrEmpty(filter.City))
+            if (!string.IsNullOrWhiteSpace(filter.City))
             {
                 StringBuilder fltr = new StringBuilder("e.City = @city");
                 filters.Add(fltr);
