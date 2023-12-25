@@ -4,5 +4,6 @@
     {
         Task<DepartmentDTO> GetAsync(int id);
         Task<IList<DepartmentDTO>> ListAsync();
+        Task<IList<DepartmentInfoDTO>> ListDepartmentsInfoAsync();
     }
 }

@@ -1,5 +1,3 @@
-using EmployeeAccountingSystem.Models.ViewModels;
-
 namespace EmployeeAccountingSystem.Controllers
 {
     public class HomeController : Controller
@@ -15,6 +13,7 @@ namespace EmployeeAccountingSystem.Controllers
             _logger = logger;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             try

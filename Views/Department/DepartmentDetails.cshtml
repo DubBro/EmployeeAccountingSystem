@@ -1,0 +1,40 @@
+﻿@model IList<EmployeeViewModel>;
+@{
+    ViewData["Title"] = "Department: " + (ViewData["Department"] as DepartmentViewModel)!.Name;
+}
+
+<div>
+    <h4>@((ViewData["Department"] as DepartmentViewModel)!.Description)</h4>
+    <hr>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Date of birth</th>
+            <th>Country</th>
+            <th>City</th>
+            <th>Hire date</th>
+            <th>Salary</th>
+            <th>Department</th>
+            <th>Position</th>
+        </tr>
+        @foreach (var employee in Model)
+        {
+            <tr>
+                <td>@employee.LastName @employee.FirstName @employee.MiddleName</td>
+                <td>@DateOnly.FromDateTime(employee.BirthDate)</td>
+                <td>@employee.Country</td>
+                <td>@employee.City</td>
+                <td>@DateOnly.FromDateTime(employee.HireDate)</td>
+                <td>@employee.Salary</td>
+                <td>@employee.Department</td>
+                <td>@employee.Position</td>
+                <td>
+                    <form asp-action="Get" asp-controller="Employee" method="post">
+                        <input name="Id" value="@employee.Id" hidden>
+                        <input type="submit" value="Details">
+                    </form>
+                </td>
+            </tr>
+        }
+    </table>
+</div>

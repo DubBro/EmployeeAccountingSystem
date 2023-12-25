@@ -73,5 +73,51 @@
                 return result;
             }
         }
+
+        public async Task<IList<DepartmentInfo>> ListDepartmentsInfoAsync()
+        {
+            string query = "SELECT " +
+                                "d.Id, d.Name, d.Description, COUNT(e.Id) AS EmployeeCount, " +
+                                "SUM(e.Salary) AS SumSalary, AVG(e.Salary) AS AvgSalary, " +
+                                "MAX(e.Salary) AS MaxSalary, MIN(e.Salary) AS MinSalary " +
+                            "FROM Department AS d " +
+                            "LEFT JOIN Employee AS e ON e.DepartmentId = d.Id " +
+                            "GROUP BY d.Id, d.Name, d.Description";
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
+                DataSet ds = new DataSet();
+                adapter.Fill(ds);
+
+                if (ds.Tables[0].Rows.Count == 0)
+                {
+                    return new List<DepartmentInfo>();
+                }
+
+                List<DepartmentInfo> result = new List<DepartmentInfo>();
+
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    var item = new DepartmentInfo()
+                    {
+                        Id = (int)ds.Tables[0].Rows[i]["Id"],
+                        Name = (string)ds.Tables[0].Rows[i]["Name"],
+                        Description = (ds.Tables[0].Rows[i]["Description"] == DBNull.Value) ? null : (string)ds.Tables[0].Rows[i]["Description"],
+                        EmployeeCount = (int)ds.Tables[0].Rows[i]["EmployeeCount"],
+                        SumSalary = (decimal)ds.Tables[0].Rows[i]["SumSalary"],
+                        AvgSalary = (decimal)ds.Tables[0].Rows[i]["AvgSalary"],
+                        MaxSalary = (decimal)ds.Tables[0].Rows[i]["MaxSalary"],
+                        MinSalary = (decimal)ds.Tables[0].Rows[i]["MinSalary"],
+                    };
+
+                    result.Add(item);
+                }
+
+                return result;
+            }
+        }
     }
 }
