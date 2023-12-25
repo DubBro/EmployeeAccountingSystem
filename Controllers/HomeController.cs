@@ -1,3 +1,5 @@
+using EmployeeAccountingSystem.Models.ViewModels;
+
 namespace EmployeeAccountingSystem.Controllers
 {
     public class HomeController : Controller
@@ -6,10 +8,7 @@ namespace EmployeeAccountingSystem.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(
-            ICompanyService companyService,
-            IMapper mapper,
-            ILogger<HomeController> logger)
+        public HomeController(ICompanyService companyService, IMapper mapper, ILogger<HomeController> logger)
         {
             _companyService = companyService;
             _mapper = mapper;

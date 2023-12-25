@@ -1,0 +1,76 @@
+﻿@model EmployeeViewModel;
+@{
+    ViewData["Title"] = $"Employee: {Model.LastName} {Model.FirstName} {Model.MiddleName}";
+}
+
+<div>
+    <form asp-action="Update" asp-controller="Employee" method="post">
+        <input name="Id" value="@Model.Id" hidden>
+        <label>First name:</label>
+        <input type="text" name="FirstName" value=@Model.FirstName>
+        <br>
+        <label>Last name:</label>
+        <input type="text" name="LastName" value=@Model.LastName>
+        <br>
+        <label>Middle name:</label>
+        <input type="text" name="MiddleName" value=@Model.MiddleName>
+        <br>
+        <label>Date of birth:</label>
+        <input type="date" name="BirthDate" value=@Model.BirthDate.ToString("yyyy-MM-dd")>
+        <br>
+        <label>Country:</label>
+        <input type="text" name="Country" value=@Model.Country>
+        <br>
+        <label>City:</label>
+        <input type="text" name="City" value=@Model.City>
+        <br>
+        <label>Address:</label>
+        <input type="text" name="Address" value=@Model.Address>
+        <br>
+        <label>Phone:</label>
+        <input type="text" name="Phone" value=@Model.Phone>
+        <br>
+        <label>Hire date:</label>
+        <input type="date" name="HireDate" value=@Model.HireDate.ToString("yyyy-MM-dd")>
+        <br>
+        <label>Salary:</label>
+        <input type="text" name="Salary" value=@Model.Salary>
+        <br>
+        <label>Department:</label>
+        <select name="DepartmentId">
+            @foreach (var item in (ViewData["Departments"] as IList<DepartmentViewModel>)!)
+            {
+                if (item.Id == Model.DepartmentId)
+                {
+                    <option value="@item.Id" selected>@item.Name</option>
+                }
+                else
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            }
+        </select>
+        <br>
+        <label>Position:</label>
+        <select name="PositionId">
+            @foreach (var item in (ViewData["Positions"] as IList<PositionViewModel>)!)
+            {
+                if (item.Id == Model.PositionId)
+                {
+                    <option value="@item.Id" selected>@item.Name</option>
+                }
+                else
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            }
+        </select>
+        <br>
+        <input type="submit" value="Update">
+    </form>
+    <br>
+    <form asp-action="Delete" asp-controller="Employee" method="post">
+        <input name="Id" value="@Model.Id" hidden>
+        <input type="submit" value="Delete">
+    </form>
+</div>
