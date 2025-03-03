@@ -1,9 +1,8 @@
-﻿namespace EmployeeAccountingSystem.Data.Repositories.Interfaces
+﻿namespace EmployeeAccountingSystem.Data.Repositories.Interfaces;
+
+public interface IDepartmentRepository
 {
-    public interface IDepartmentRepository
-    {
-        Task<DepartmentEntity> GetAsync(int id);
-        Task<IList<DepartmentEntity>> ListAsync();
-        Task<IList<DepartmentInfo>> ListDepartmentsInfoAsync();
-    }
+    Task<DepartmentEntity> GetAsync(int id);
+    Task<IList<DepartmentEntity>> ListAsync();
+    Task<IList<DepartmentInfo>> ListDepartmentsInfoAsync();
 }

@@ -1,8 +1,7 @@
-﻿namespace EmployeeAccountingSystem.Services.Interfaces
+﻿namespace EmployeeAccountingSystem.Services.Interfaces;
+
+public interface IPositionService
 {
-    public interface IPositionService
-    {
-        Task<PositionDTO> GetAsync(int id);
-        Task<IList<PositionDTO>> ListAsync();
-    }
+    Task<PositionDTO> GetAsync(int id);
+    Task<IList<PositionDTO>> ListAsync();
 }
