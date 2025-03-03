@@ -4,6 +4,7 @@ public abstract class BaseRepository
 {
     private readonly string _connectionString;
 
+    // TODO: Test how work IOptions, IOptionsSnapshot, IOptionsMonitor
     public BaseRepository(IOptions<Config> options)
     {
         _connectionString = options.Value.ConnectionString;

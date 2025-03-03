@@ -1,4 +1,6 @@
-﻿namespace EmployeeAccountingSystem.Data.Repositories;
+﻿using EmployeeAccountingSystem.Utils.Extensions;
+
+namespace EmployeeAccountingSystem.Data.Repositories;
 
 public class CompanyRepository : BaseRepository, ICompanyRepository
 {
@@ -9,18 +11,18 @@ public class CompanyRepository : BaseRepository, ICompanyRepository
 
     public async Task<CompanyEntity> GetAsync(int id = 1)
     {
-        string query = "SELECT * FROM Company WHERE Id = @id";
+        var query = "SELECT * FROM Company WHERE Id = @id";
 
-        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
+        using (var connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 
-            SqlCommand command = new SqlCommand(query, connection);
-            SqlParameter paramId = new SqlParameter("@id", id);
-            command.Parameters.Add(paramId);
+            var command = new SqlCommand(query, connection);
 
-            SqlDataAdapter adapter = new SqlDataAdapter(command);
-            DataSet ds = new DataSet();
+            command.AddParameter("@id", id);
+
+            var adapter = new SqlDataAdapter(command);
+            var ds = new DataSet();
             adapter.Fill(ds);
 
             if (ds.Tables[0].Rows.Count == 0)

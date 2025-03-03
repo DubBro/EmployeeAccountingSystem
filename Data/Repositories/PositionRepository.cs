@@ -1,4 +1,6 @@
-﻿namespace EmployeeAccountingSystem.Data.Repositories;
+﻿using EmployeeAccountingSystem.Utils.Extensions;
+
+namespace EmployeeAccountingSystem.Data.Repositories;
 
 public class PositionRepository : BaseRepository, IPositionRepository
 {
@@ -9,18 +11,18 @@ public class PositionRepository : BaseRepository, IPositionRepository
 
     public async Task<PositionEntity> GetAsync(int id)
     {
-        string query = "SELECT * FROM Position WHERE Id = @id";
+        var query = "SELECT * FROM Position WHERE Id = @id";
 
-        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
+        using (var connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 
-            SqlCommand command = new SqlCommand(query, connection);
-            SqlParameter paramId = new SqlParameter("@id", id);
-            command.Parameters.Add(paramId);
+            var command = new SqlCommand(query, connection);
 
-            SqlDataAdapter adapter = new SqlDataAdapter(command);
-            DataSet ds = new DataSet();
+            command.AddParameter("@id", id);
+
+            var adapter = new SqlDataAdapter(command);
+            var ds = new DataSet();
             adapter.Fill(ds);
 
             if (ds.Tables[0].Rows.Count == 0)
@@ -39,14 +41,14 @@ public class PositionRepository : BaseRepository, IPositionRepository
 
     public async Task<IList<PositionEntity>> ListAsync()
     {
-        string query = "SELECT * FROM Position";
+        var query = "SELECT * FROM Position";
 
-        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
+        using (var connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 
-            SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-            DataSet ds = new DataSet();
+            var adapter = new SqlDataAdapter(query, connection);
+            var ds = new DataSet();
             adapter.Fill(ds);
 
             if (ds.Tables[0].Rows.Count == 0)
@@ -54,7 +56,7 @@ public class PositionRepository : BaseRepository, IPositionRepository
                 return new List<PositionEntity>();
             }
 
-            List<PositionEntity> result = new List<PositionEntity>();
+            var result = new List<PositionEntity>();
 
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {

@@ -1,4 +1,6 @@
-﻿namespace EmployeeAccountingSystem.Data.Repositories;
+﻿using EmployeeAccountingSystem.Utils.Extensions;
+
+namespace EmployeeAccountingSystem.Data.Repositories;
 
 public class DepartmentRepository : BaseRepository, IDepartmentRepository
 {
@@ -9,18 +11,18 @@ public class DepartmentRepository : BaseRepository, IDepartmentRepository
 
     public async Task<DepartmentEntity> GetAsync(int id)
     {
-        string query = "SELECT * FROM Department WHERE Id = @id";
+        var query = "SELECT * FROM Department WHERE Id = @id";
 
-        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
+        using (var connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 
-            SqlCommand command = new SqlCommand(query, connection);
-            SqlParameter paramId = new SqlParameter("@id", id);
-            command.Parameters.Add(paramId);
+            var command = new SqlCommand(query, connection);
 
-            SqlDataAdapter adapter = new SqlDataAdapter(command);
-            DataSet ds = new DataSet();
+            command.AddParameter("@id", id);
+
+            var adapter = new SqlDataAdapter(command);
+            var ds = new DataSet();
             adapter.Fill(ds);
 
             if (ds.Tables[0].Rows.Count == 0)
@@ -39,14 +41,14 @@ public class DepartmentRepository : BaseRepository, IDepartmentRepository
 
     public async Task<IList<DepartmentEntity>> ListAsync()
     {
-        string query = "SELECT * FROM Department";
+        var query = "SELECT * FROM Department";
 
-        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
+        using (var connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 
-            SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-            DataSet ds = new DataSet();
+            var adapter = new SqlDataAdapter(query, connection);
+            var ds = new DataSet();
             adapter.Fill(ds);
 
             if (ds.Tables[0].Rows.Count == 0)
@@ -54,7 +56,7 @@ public class DepartmentRepository : BaseRepository, IDepartmentRepository
                 return new List<DepartmentEntity>();
             }
 
-            List<DepartmentEntity> result = new List<DepartmentEntity>();
+            var result = new List<DepartmentEntity>();
 
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {
@@ -74,20 +76,20 @@ public class DepartmentRepository : BaseRepository, IDepartmentRepository
 
     public async Task<IList<DepartmentInfo>> ListDepartmentsInfoAsync()
     {
-        string query = "SELECT " +
-                            "d.Id, d.Name, d.Description, COUNT(e.Id) AS EmployeeCount, " +
-                            "SUM(e.Salary) AS SumSalary, AVG(e.Salary) AS AvgSalary, " +
-                            "MAX(e.Salary) AS MaxSalary, MIN(e.Salary) AS MinSalary " +
-                        "FROM Department AS d " +
-                        "LEFT JOIN Employee AS e ON e.DepartmentId = d.Id " +
-                        "GROUP BY d.Id, d.Name, d.Description";
+        var query = "SELECT " +
+                        "d.Id, d.Name, d.Description, COUNT(e.Id) AS EmployeeCount, " +
+                        "SUM(e.Salary) AS SumSalary, AVG(e.Salary) AS AvgSalary, " +
+                        "MAX(e.Salary) AS MaxSalary, MIN(e.Salary) AS MinSalary " +
+                    "FROM Department AS d " +
+                    "LEFT JOIN Employee AS e ON e.DepartmentId = d.Id " +
+                    "GROUP BY d.Id, d.Name, d.Description";
 
-        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
+        using (var connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 
-            SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-            DataSet ds = new DataSet();
+            var adapter = new SqlDataAdapter(query, connection);
+            var ds = new DataSet();
             adapter.Fill(ds);
 
             if (ds.Tables[0].Rows.Count == 0)
@@ -95,7 +97,7 @@ public class DepartmentRepository : BaseRepository, IDepartmentRepository
                 return new List<DepartmentInfo>();
             }
 
-            List<DepartmentInfo> result = new List<DepartmentInfo>();
+            var result = new List<DepartmentInfo>();
 
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {

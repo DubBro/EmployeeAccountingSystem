@@ -1,4 +1,6 @@
-﻿namespace EmployeeAccountingSystem.Data.Repositories;
+﻿using EmployeeAccountingSystem.Utils.Extensions;
+
+namespace EmployeeAccountingSystem.Data.Repositories;
 
 public class EmployeeRepository : BaseRepository, IEmployeeRepository
 {
@@ -9,25 +11,25 @@ public class EmployeeRepository : BaseRepository, IEmployeeRepository
 
     public async Task<EmployeeEntity> GetAsync(int id)
     {
-        string query = "SELECT " +
-                            "e.Id, e.FirstName, e.LastName, e.MiddleName, e.BirthDate, " +
-                            "e.Country, e.City, e.Address, e.Phone, e.HireDate, e.Salary, " +
-                            "e.DepartmentId, d.Name AS Department, e.PositionId, p.Name AS Position " +
-                        "FROM Employee AS e " +
-                        "LEFT JOIN Department AS d ON e.DepartmentId = d.Id " +
-                        "LEFT JOIN Position AS p ON e.PositionId = p.Id " +
-                        "WHERE e.Id = @id";
+        var query = "SELECT " +
+                        "e.Id, e.FirstName, e.LastName, e.MiddleName, e.BirthDate, " +
+                        "e.Country, e.City, e.Address, e.Phone, e.HireDate, e.Salary, " +
+                        "e.DepartmentId, d.Name AS Department, e.PositionId, p.Name AS Position " +
+                    "FROM Employee AS e " +
+                    "LEFT JOIN Department AS d ON e.DepartmentId = d.Id " +
+                    "LEFT JOIN Position AS p ON e.PositionId = p.Id " +
+                    "WHERE e.Id = @id";
 
-        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
+        using (var connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 
-            SqlCommand command = new SqlCommand(query, connection);
-            SqlParameter paramId = new SqlParameter("@id", id);
-            command.Parameters.Add(paramId);
+            var command = new SqlCommand(query, connection);
 
-            SqlDataAdapter adapter = new SqlDataAdapter(command);
-            DataSet ds = new DataSet();
+            command.AddParameter("@id", id);
+
+            var adapter = new SqlDataAdapter(command);
+            var ds = new DataSet();
             adapter.Fill(ds);
 
             if (ds.Tables[0].Rows.Count == 0)
@@ -35,28 +37,26 @@ public class EmployeeRepository : BaseRepository, IEmployeeRepository
                 return new EmployeeEntity();
             }
 
-            var result = MapFromDataSetToEmployeeEntity(ds);
-
-            return result;
+            return MapFromDataSetToEmployeeEntity(ds);
         }
     }
 
     public async Task<IList<EmployeeEntity>> ListAsync()
     {
-        string query = "SELECT " +
-                            "e.Id, e.FirstName, e.LastName, e.MiddleName, e.BirthDate, " +
-                            "e.Country, e.City, e.Address, e.Phone, e.HireDate, e.Salary, " +
-                            "e.DepartmentId, d.Name AS Department, e.PositionId, p.Name AS Position " +
-                        "FROM Employee AS e " +
-                        "LEFT JOIN Department AS d ON e.DepartmentId = d.Id " +
-                        "LEFT JOIN Position AS p ON e.PositionId = p.Id";
+        var query = "SELECT " +
+                        "e.Id, e.FirstName, e.LastName, e.MiddleName, e.BirthDate, " +
+                        "e.Country, e.City, e.Address, e.Phone, e.HireDate, e.Salary, " +
+                        "e.DepartmentId, d.Name AS Department, e.PositionId, p.Name AS Position " +
+                    "FROM Employee AS e " +
+                    "LEFT JOIN Department AS d ON e.DepartmentId = d.Id " +
+                    "LEFT JOIN Position AS p ON e.PositionId = p.Id";
 
-        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
+        using (var connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 
-            SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-            DataSet ds = new DataSet();
+            var adapter = new SqlDataAdapter(query, connection);
+            var ds = new DataSet();
             adapter.Fill(ds);
 
             if (ds.Tables[0].Rows.Count == 0)
@@ -64,7 +64,7 @@ public class EmployeeRepository : BaseRepository, IEmployeeRepository
                 return new List<EmployeeEntity>();
             }
 
-            List<EmployeeEntity> result = new List<EmployeeEntity>();
+            var result = new List<EmployeeEntity>();
 
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {
@@ -77,34 +77,35 @@ public class EmployeeRepository : BaseRepository, IEmployeeRepository
         }
     }
 
+    // TODO: refactor dublicates in this method
     public async Task<IList<EmployeeEntity>> ListFilteredAsync(EmployeeFilter filter)
     {
-        StringBuilder query = new StringBuilder("SELECT " +
-                                                    "e.Id, e.FirstName, e.LastName, e.MiddleName, e.BirthDate, " +
-                                                    "e.Country, e.City, e.Address, e.Phone, e.HireDate, e.Salary, " +
-                                                    "e.DepartmentId, d.Name AS Department, e.PositionId, p.Name AS Position " +
-                                                "FROM Employee AS e " +
-                                                "LEFT JOIN Department AS d ON e.DepartmentId = d.Id " +
-                                                "LEFT JOIN Position AS p ON e.PositionId = p.Id");
+        var query = new StringBuilder("SELECT " +
+                                            "e.Id, e.FirstName, e.LastName, e.MiddleName, e.BirthDate, " +
+                                            "e.Country, e.City, e.Address, e.Phone, e.HireDate, e.Salary, " +
+                                            "e.DepartmentId, d.Name AS Department, e.PositionId, p.Name AS Position " +
+                                        "FROM Employee AS e " +
+                                        "LEFT JOIN Department AS d ON e.DepartmentId = d.Id " +
+                                        "LEFT JOIN Position AS p ON e.PositionId = p.Id");
 
-        List<StringBuilder> filters = new List<StringBuilder>();
-        List<SqlParameter> sqlParams = new List<SqlParameter>();
+        var filters = new List<StringBuilder>();
+        var sqlParams = new List<SqlParameter>();
 
         if (!string.IsNullOrWhiteSpace(filter.Name))
         {
-            StringBuilder fltr = new StringBuilder("(e.FirstName LIKE @name OR e.LastName LIKE @name OR e.MiddleName LIKE @name)");
+            var fltr = new StringBuilder("(e.FirstName LIKE @name OR e.LastName LIKE @name OR e.MiddleName LIKE @name)");
             filters.Add(fltr);
 
-            SqlParameter param = new SqlParameter("@name", "%" + filter.Name + "%");
+            var param = new SqlParameter("@name", "%" + filter.Name + "%");
             sqlParams.Add(param);
         }
 
         if (!string.IsNullOrWhiteSpace(filter.Country))
         {
-            StringBuilder fltr = new StringBuilder("e.Country = @country");
+            var fltr = new StringBuilder("e.Country = @country");
             filters.Add(fltr);
 
-            SqlParameter param = new SqlParameter("@country", filter.Country);
+            var param = new SqlParameter("@country", filter.Country);
             sqlParams.Add(param);
         }
 
@@ -170,29 +171,27 @@ public class EmployeeRepository : BaseRepository, IEmployeeRepository
             query.Append(condition);
         }
 
-        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
+        using (var connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 
-            SqlCommand command = new SqlCommand(query.ToString(), connection);
+            var command = new SqlCommand(query.ToString(), connection);
 
             if (sqlParams.Count > 0)
             {
                 command.Parameters.AddRange(sqlParams.ToArray());
             }
 
-            SqlDataAdapter adapter = new SqlDataAdapter(command);
-            DataSet ds = new DataSet();
+            var adapter = new SqlDataAdapter(command);
+            var ds = new DataSet();
             adapter.Fill(ds);
-
-            var a = command.CommandText;
 
             if (ds.Tables[0].Rows.Count == 0)
             {
                 return new List<EmployeeEntity>();
             }
 
-            List<EmployeeEntity> result = new List<EmployeeEntity>();
+            var result = new List<EmployeeEntity>();
 
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {
@@ -207,179 +206,68 @@ public class EmployeeRepository : BaseRepository, IEmployeeRepository
 
     public async Task<int> AddAsync(EmployeeEntity employeeEntity)
     {
-        string query = "INSERT INTO Employee " +
-                            "(FirstName, LastName, MiddleName, BirthDate, Country, City, " +
-                            "Address, Phone, HireDate, Salary, DepartmentId, PositionId)" +
-                        "VALUES " +
-                            "(@firstName, @lastName, @middleName, @birthDate, @country, @city, " +
-                            "@address, @phone, @hireDate, @salary, @departmentId, @positionId);" +
-                        "SELECT SCOPE_IDENTITY()";
+        var query = "INSERT INTO Employee " +
+                        "(FirstName, LastName, MiddleName, BirthDate, Country, City, " +
+                        "Address, Phone, HireDate, Salary, DepartmentId, PositionId)" +
+                    "VALUES " +
+                        "(@firstName, @lastName, @middleName, @birthDate, @country, @city, " +
+                        "@address, @phone, @hireDate, @salary, @departmentId, @positionId);" +
+                    "SELECT SCOPE_IDENTITY()";
 
-        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
+        using (var connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 
-            SqlCommand command = new SqlCommand(query, connection);
+            var command = new SqlCommand(query, connection);
+
+            SetDbCommandParametersFromEmployeeEntity(employeeEntity, command);
 
             var transaction = connection.BeginTransaction();
-            command.Transaction = transaction;
 
-            try
-            {
-                SqlParameter paramFirstName = new SqlParameter("@firstName", employeeEntity.FirstName);
-                command.Parameters.Add(paramFirstName);
-
-                SqlParameter paramLastName = new SqlParameter("@lastName", employeeEntity.LastName);
-                command.Parameters.Add(paramLastName);
-
-                SqlParameter paramMiddleName = new SqlParameter("@middleName", employeeEntity.MiddleName);
-                command.Parameters.Add(paramMiddleName);
-
-                SqlParameter paramBirthDate = new SqlParameter("@birthDate", employeeEntity.BirthDate);
-                command.Parameters.Add(paramBirthDate);
-
-                SqlParameter paramCountry = new SqlParameter("@country", (employeeEntity.Country == null) ? DBNull.Value : employeeEntity.Country);
-                command.Parameters.Add(paramCountry);
-
-                SqlParameter paramCity = new SqlParameter("@city", (employeeEntity.City == null) ? DBNull.Value : employeeEntity.City);
-                command.Parameters.Add(paramCity);
-
-                SqlParameter paramAddress = new SqlParameter("@address", (employeeEntity.Address == null) ? DBNull.Value : employeeEntity.Address);
-                command.Parameters.Add(paramAddress);
-
-                SqlParameter paramPhone = new SqlParameter("@phone", (employeeEntity.Phone == null) ? DBNull.Value : employeeEntity.Phone);
-                command.Parameters.Add(paramPhone);
-
-                SqlParameter paramHireDate = new SqlParameter("@hireDate", employeeEntity.HireDate);
-                command.Parameters.Add(paramHireDate);
-
-                SqlParameter paramSalary = new SqlParameter("@salary", employeeEntity.Salary);
-                command.Parameters.Add(paramSalary);
-
-                SqlParameter paramDepartmentId = new SqlParameter("@departmentId", employeeEntity.DepartmentId);
-                command.Parameters.Add(paramDepartmentId);
-
-                SqlParameter paramPositionId = new SqlParameter("@positionId", employeeEntity.PositionId);
-                command.Parameters.Add(paramPositionId);
-
-                var result = await command.ExecuteScalarAsync();
-
-                await transaction.CommitAsync();
-
-                return Convert.ToInt32(result);
-            }
-            catch
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
+            return await command.ExecuteDbCommandScalarSafetyAsync(transaction);
         }
     }
 
     public async Task<int> UpdateAsync(EmployeeEntity employeeEntity)
     {
-        string query = "UPDATE Employee SET " +
-                            "FirstName = @firstName, LastName = @lastName, MiddleName = @middleName, BirthDate = @birthDate, " +
-                            "Country = @country, City = @city, Address = @address, Phone = @phone, HireDate = @hireDate, " +
-                            "Salary = @salary, DepartmentId = @departmentId, PositionId = @positionId " +
-                        "OUTPUT INSERTED.Id " +
-                        "WHERE Id = @id";
+        var query = "UPDATE Employee SET " +
+                        "FirstName = @firstName, LastName = @lastName, MiddleName = @middleName, BirthDate = @birthDate, " +
+                        "Country = @country, City = @city, Address = @address, Phone = @phone, HireDate = @hireDate, " +
+                        "Salary = @salary, DepartmentId = @departmentId, PositionId = @positionId " +
+                    "OUTPUT INSERTED.Id " +
+                    "WHERE Id = @id";
 
-        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
+        using (var connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 
-            SqlCommand command = new SqlCommand(query, connection);
+            var command = new SqlCommand(query, connection);
+
+            command.AddParameter("@id", employeeEntity.Id);
+
+            SetDbCommandParametersFromEmployeeEntity(employeeEntity, command);
 
             var transaction = connection.BeginTransaction();
-            command.Transaction = transaction;
 
-            try
-            {
-                SqlParameter paramId = new SqlParameter("@id", employeeEntity.Id);
-                command.Parameters.Add(paramId);
-
-                SqlParameter paramFirstName = new SqlParameter("@firstName", employeeEntity.FirstName);
-                command.Parameters.Add(paramFirstName);
-
-                SqlParameter paramLastName = new SqlParameter("@lastName", employeeEntity.LastName);
-                command.Parameters.Add(paramLastName);
-
-                SqlParameter paramMiddleName = new SqlParameter("@middleName", employeeEntity.MiddleName);
-                command.Parameters.Add(paramMiddleName);
-
-                SqlParameter paramBirthDate = new SqlParameter("@birthDate", employeeEntity.BirthDate);
-                command.Parameters.Add(paramBirthDate);
-
-                SqlParameter paramCountry = new SqlParameter("@country", (employeeEntity.Country == null) ? DBNull.Value : employeeEntity.Country);
-                command.Parameters.Add(paramCountry);
-
-                SqlParameter paramCity = new SqlParameter("@city", (employeeEntity.City == null) ? DBNull.Value : employeeEntity.City);
-                command.Parameters.Add(paramCity);
-
-                SqlParameter paramAddress = new SqlParameter("@address", (employeeEntity.Address == null) ? DBNull.Value : employeeEntity.Address);
-                command.Parameters.Add(paramAddress);
-
-                SqlParameter paramPhone = new SqlParameter("@phone", (employeeEntity.Phone == null) ? DBNull.Value : employeeEntity.Phone);
-                command.Parameters.Add(paramPhone);
-
-                SqlParameter paramHireDate = new SqlParameter("@hireDate", employeeEntity.HireDate);
-                command.Parameters.Add(paramHireDate);
-
-                SqlParameter paramSalary = new SqlParameter("@salary", employeeEntity.Salary);
-                command.Parameters.Add(paramSalary);
-
-                SqlParameter paramDepartmentId = new SqlParameter("@departmentId", employeeEntity.DepartmentId);
-                command.Parameters.Add(paramDepartmentId);
-
-                SqlParameter paramPositionId = new SqlParameter("@positionId", employeeEntity.PositionId);
-                command.Parameters.Add(paramPositionId);
-
-                var result = await command.ExecuteScalarAsync();
-
-                await transaction.CommitAsync();
-
-                return Convert.ToInt32(result);
-            }
-            catch
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
+            return await command.ExecuteDbCommandScalarSafetyAsync(transaction);
         }
     }
 
     public async Task<int> DeleteAsync(int id)
     {
-        string query = "DELETE FROM Employee " +
-                        "OUTPUT DELETED.Id " +
-                        "WHERE Id = @id";
+        var query = "DELETE FROM Employee OUTPUT DELETED.Id WHERE Id = @id";
 
-        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
+        using (var connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 
-            SqlCommand command = new SqlCommand(query, connection);
+            var command = new SqlCommand(query, connection);
+
+            command.AddParameter("@id", id);
 
             var transaction = connection.BeginTransaction();
-            command.Transaction = transaction;
 
-            try
-            {
-                SqlParameter paramId = new SqlParameter("@id", id);
-                command.Parameters.Add(paramId);
-
-                var result = await command.ExecuteScalarAsync();
-
-                await transaction.CommitAsync();
-
-                return Convert.ToInt32(result);
-            }
-            catch
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
+            return await command.ExecuteDbCommandScalarSafetyAsync(transaction);
         }
     }
 
@@ -403,5 +291,21 @@ public class EmployeeRepository : BaseRepository, IEmployeeRepository
             PositionId = (int)ds.Tables[0].Rows[0]["PositionId"],
             Position = (string)ds.Tables[0].Rows[0]["Position"],
         };
+    }
+
+    private static void SetDbCommandParametersFromEmployeeEntity(EmployeeEntity employeeEntity, IDbCommand command)
+    {
+        command.AddParameter("@firstName", employeeEntity.FirstName);
+        command.AddParameter("@lastName", employeeEntity.LastName);
+        command.AddParameter("@middleName", employeeEntity.MiddleName);
+        command.AddParameter("@birthDate", employeeEntity.BirthDate);
+        command.AddParameter("@country", (employeeEntity.Country == null) ? DBNull.Value : employeeEntity.Country);
+        command.AddParameter("@city", (employeeEntity.City == null) ? DBNull.Value : employeeEntity.City);
+        command.AddParameter("@address", (employeeEntity.Address == null) ? DBNull.Value : employeeEntity.Address);
+        command.AddParameter("@phone", (employeeEntity.Phone == null) ? DBNull.Value : employeeEntity.Phone);
+        command.AddParameter("@hireDate", employeeEntity.HireDate);
+        command.AddParameter("@salary", employeeEntity.Salary);
+        command.AddParameter("@departmentId", employeeEntity.DepartmentId);
+        command.AddParameter("@positionId", employeeEntity.PositionId);
     }
 }
