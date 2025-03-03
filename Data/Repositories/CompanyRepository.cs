@@ -1,19 +1,17 @@
 ﻿namespace EmployeeAccountingSystem.Data.Repositories;
 
-public class CompanyRepository : ICompanyRepository
+public class CompanyRepository : BaseRepository, ICompanyRepository
 {
-    private readonly string _connectionString;
-
     public CompanyRepository(IOptions<Config> options)
+        : base(options)
     {
-        _connectionString = options.Value.ConnectionString;
     }
 
     public async Task<CompanyEntity> GetAsync(int id = 1)
     {
         string query = "SELECT * FROM Company WHERE Id = @id";
 
-        using (SqlConnection connection = new SqlConnection(_connectionString))
+        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 

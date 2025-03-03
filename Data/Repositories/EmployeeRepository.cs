@@ -1,12 +1,10 @@
 ﻿namespace EmployeeAccountingSystem.Data.Repositories;
 
-public class EmployeeRepository : IEmployeeRepository
+public class EmployeeRepository : BaseRepository, IEmployeeRepository
 {
-    private readonly string _connectionString;
-
     public EmployeeRepository(IOptions<Config> options)
+        : base(options)
     {
-        _connectionString = options.Value.ConnectionString;
     }
 
     public async Task<EmployeeEntity> GetAsync(int id)
@@ -20,7 +18,7 @@ public class EmployeeRepository : IEmployeeRepository
                         "LEFT JOIN Position AS p ON e.PositionId = p.Id " +
                         "WHERE e.Id = @id";
 
-        using (SqlConnection connection = new SqlConnection(_connectionString))
+        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 
@@ -68,7 +66,7 @@ public class EmployeeRepository : IEmployeeRepository
                         "LEFT JOIN Department AS d ON e.DepartmentId = d.Id " +
                         "LEFT JOIN Position AS p ON e.PositionId = p.Id";
 
-        using (SqlConnection connection = new SqlConnection(_connectionString))
+        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 
@@ -204,7 +202,7 @@ public class EmployeeRepository : IEmployeeRepository
             query.Append(condition);
         }
 
-        using (SqlConnection connection = new SqlConnection(_connectionString))
+        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 
@@ -266,7 +264,7 @@ public class EmployeeRepository : IEmployeeRepository
                             "@address, @phone, @hireDate, @salary, @departmentId, @positionId);" +
                         "SELECT SCOPE_IDENTITY()";
 
-        using (SqlConnection connection = new SqlConnection(_connectionString))
+        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 
@@ -336,7 +334,7 @@ public class EmployeeRepository : IEmployeeRepository
                         "OUTPUT INSERTED.Id " +
                         "WHERE Id = @id";
 
-        using (SqlConnection connection = new SqlConnection(_connectionString))
+        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 
@@ -406,7 +404,7 @@ public class EmployeeRepository : IEmployeeRepository
                         "OUTPUT DELETED.Id " +
                         "WHERE Id = @id";
 
-        using (SqlConnection connection = new SqlConnection(_connectionString))
+        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 

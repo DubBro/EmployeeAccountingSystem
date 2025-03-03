@@ -1,19 +1,17 @@
 ﻿namespace EmployeeAccountingSystem.Data.Repositories;
 
-public class DepartmentRepository : IDepartmentRepository
+public class DepartmentRepository : BaseRepository, IDepartmentRepository
 {
-    private readonly string _connectionString;
-
     public DepartmentRepository(IOptions<Config> options)
+        : base(options)
     {
-        _connectionString = options.Value.ConnectionString;
     }
 
     public async Task<DepartmentEntity> GetAsync(int id)
     {
         string query = "SELECT * FROM Department WHERE Id = @id";
 
-        using (SqlConnection connection = new SqlConnection(_connectionString))
+        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 
@@ -43,7 +41,7 @@ public class DepartmentRepository : IDepartmentRepository
     {
         string query = "SELECT * FROM Department";
 
-        using (SqlConnection connection = new SqlConnection(_connectionString))
+        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 
@@ -84,7 +82,7 @@ public class DepartmentRepository : IDepartmentRepository
                         "LEFT JOIN Employee AS e ON e.DepartmentId = d.Id " +
                         "GROUP BY d.Id, d.Name, d.Description";
 
-        using (SqlConnection connection = new SqlConnection(_connectionString))
+        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 

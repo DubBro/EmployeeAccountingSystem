@@ -1,19 +1,17 @@
 ﻿namespace EmployeeAccountingSystem.Data.Repositories;
 
-public class PositionRepository : IPositionRepository
+public class PositionRepository : BaseRepository, IPositionRepository
 {
-    private readonly string _connectionString;
-
     public PositionRepository(IOptions<Config> options)
+        : base(options)
     {
-        _connectionString = options.Value.ConnectionString;
     }
 
     public async Task<PositionEntity> GetAsync(int id)
     {
         string query = "SELECT * FROM Position WHERE Id = @id";
 
-        using (SqlConnection connection = new SqlConnection(_connectionString))
+        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 
@@ -43,7 +41,7 @@ public class PositionRepository : IPositionRepository
     {
         string query = "SELECT * FROM Position";
 
-        using (SqlConnection connection = new SqlConnection(_connectionString))
+        using (SqlConnection connection = new SqlConnection(GetConnectionString()))
         {
             await connection.OpenAsync();
 
