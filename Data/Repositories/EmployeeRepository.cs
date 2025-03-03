@@ -37,7 +37,7 @@ public class EmployeeRepository : BaseRepository, IEmployeeRepository
                 return new EmployeeEntity();
             }
 
-            return MapFromDataSetToEmployeeEntity(ds);
+            return MapFromDataSetToEmployeeEntity(ds, 0);
         }
     }
 
@@ -68,7 +68,7 @@ public class EmployeeRepository : BaseRepository, IEmployeeRepository
 
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {
-                var item = MapFromDataSetToEmployeeEntity(ds);
+                var item = MapFromDataSetToEmployeeEntity(ds, i);
 
                 result.Add(item);
             }
@@ -195,7 +195,7 @@ public class EmployeeRepository : BaseRepository, IEmployeeRepository
 
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {
-                var item = MapFromDataSetToEmployeeEntity(ds);
+                var item = MapFromDataSetToEmployeeEntity(ds, i);
 
                 result.Add(item);
             }
@@ -271,25 +271,25 @@ public class EmployeeRepository : BaseRepository, IEmployeeRepository
         }
     }
 
-    private static EmployeeEntity MapFromDataSetToEmployeeEntity(DataSet ds)
+    private static EmployeeEntity MapFromDataSetToEmployeeEntity(DataSet ds, int rowNumber)
     {
         return new EmployeeEntity
         {
-            Id = (int)ds.Tables[0].Rows[0]["Id"],
-            FirstName = (string)ds.Tables[0].Rows[0]["FirstName"],
-            LastName = (string)ds.Tables[0].Rows[0]["LastName"],
-            MiddleName = (string)ds.Tables[0].Rows[0]["MiddleName"],
-            BirthDate = (DateTime)ds.Tables[0].Rows[0]["BirthDate"],
-            Country = (ds.Tables[0].Rows[0]["Country"] == DBNull.Value) ? null : (string)ds.Tables[0].Rows[0]["Country"],
-            City = (ds.Tables[0].Rows[0]["City"] == DBNull.Value) ? null : (string)ds.Tables[0].Rows[0]["City"],
-            Address = (ds.Tables[0].Rows[0]["Address"] == DBNull.Value) ? null : (string)ds.Tables[0].Rows[0]["Address"],
-            Phone = (ds.Tables[0].Rows[0]["Phone"] == DBNull.Value) ? null : (string)ds.Tables[0].Rows[0]["Phone"],
-            HireDate = (DateTime)ds.Tables[0].Rows[0]["HireDate"],
-            Salary = (decimal)ds.Tables[0].Rows[0]["Salary"],
-            DepartmentId = (int)ds.Tables[0].Rows[0]["DepartmentId"],
-            Department = (string)ds.Tables[0].Rows[0]["Department"],
-            PositionId = (int)ds.Tables[0].Rows[0]["PositionId"],
-            Position = (string)ds.Tables[0].Rows[0]["Position"],
+            Id = (int)ds.Tables[0].Rows[rowNumber]["Id"],
+            FirstName = (string)ds.Tables[0].Rows[rowNumber]["FirstName"],
+            LastName = (string)ds.Tables[0].Rows[rowNumber]["LastName"],
+            MiddleName = (string)ds.Tables[0].Rows[rowNumber]["MiddleName"],
+            BirthDate = (DateTime)ds.Tables[0].Rows[rowNumber]["BirthDate"],
+            Country = (ds.Tables[0].Rows[rowNumber]["Country"] == DBNull.Value) ? null : (string)ds.Tables[0].Rows[rowNumber]["Country"],
+            City = (ds.Tables[0].Rows[rowNumber]["City"] == DBNull.Value) ? null : (string)ds.Tables[0].Rows[rowNumber]["City"],
+            Address = (ds.Tables[0].Rows[rowNumber]["Address"] == DBNull.Value) ? null : (string)ds.Tables[0].Rows[rowNumber]["Address"],
+            Phone = (ds.Tables[0].Rows[rowNumber]["Phone"] == DBNull.Value) ? null : (string)ds.Tables[0].Rows[rowNumber]["Phone"],
+            HireDate = (DateTime)ds.Tables[0].Rows[rowNumber]["HireDate"],
+            Salary = (decimal)ds.Tables[0].Rows[rowNumber]["Salary"],
+            DepartmentId = (int)ds.Tables[0].Rows[rowNumber]["DepartmentId"],
+            Department = (string)ds.Tables[0].Rows[rowNumber]["Department"],
+            PositionId = (int)ds.Tables[0].Rows[rowNumber]["PositionId"],
+            Position = (string)ds.Tables[0].Rows[rowNumber]["Position"],
         };
     }
 
