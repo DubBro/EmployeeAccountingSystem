@@ -1,77 +1,76 @@
-﻿namespace EmployeeAccountingSystem.Data.Repositories
+﻿using EmployeeAccountingSystem.Utils.Extensions;
+
+namespace EmployeeAccountingSystem.Data.Repositories;
+
+public class PositionRepository : BaseRepository, IPositionRepository
 {
-    public class PositionRepository : IPositionRepository
+    public PositionRepository(IOptions<Config> options)
+        : base(options)
     {
-        private readonly string _connectionString;
+    }
 
-        public PositionRepository(IOptions<Config> options)
+    public async Task<PositionEntity> GetAsync(int id)
+    {
+        var query = "SELECT * FROM Position WHERE Id = @id";
+
+        using (var connection = new SqlConnection(GetConnectionString()))
         {
-            _connectionString = options.Value.ConnectionString;
-        }
+            await connection.OpenAsync();
 
-        public async Task<PositionEntity> GetAsync(int id)
-        {
-            string query = "SELECT * FROM Position WHERE Id = @id";
+            var command = new SqlCommand(query, connection);
 
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            command.AddParameter("@id", id);
+
+            var adapter = new SqlDataAdapter(command);
+            var ds = new DataSet();
+            adapter.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count == 0)
             {
-                await connection.OpenAsync();
+                return new PositionEntity();
+            }
 
-                SqlCommand command = new SqlCommand(query, connection);
-                SqlParameter paramId = new SqlParameter("@id", id);
-                command.Parameters.Add(paramId);
+            return new PositionEntity()
+            {
+                Id = (int)ds.Tables[0].Rows[0]["Id"],
+                Name = (string)ds.Tables[0].Rows[0]["Name"],
+                Description = (ds.Tables[0].Rows[0]["Description"] == DBNull.Value) ? null : (string)ds.Tables[0].Rows[0]["Description"],
+            };
+        }
+    }
 
-                SqlDataAdapter adapter = new SqlDataAdapter(command);
-                DataSet ds = new DataSet();
-                adapter.Fill(ds);
+    public async Task<IList<PositionEntity>> ListAsync()
+    {
+        var query = "SELECT * FROM Position";
 
-                if (ds.Tables[0].Rows.Count == 0)
+        using (var connection = new SqlConnection(GetConnectionString()))
+        {
+            await connection.OpenAsync();
+
+            var adapter = new SqlDataAdapter(query, connection);
+            var ds = new DataSet();
+            adapter.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count == 0)
+            {
+                return new List<PositionEntity>();
+            }
+
+            var result = new List<PositionEntity>();
+
+            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            {
+                var item = new PositionEntity()
                 {
-                    return new PositionEntity();
-                }
-
-                return new PositionEntity()
-                {
-                    Id = (int)ds.Tables[0].Rows[0]["Id"],
-                    Name = (string)ds.Tables[0].Rows[0]["Name"],
-                    Description = (ds.Tables[0].Rows[0]["Description"] == DBNull.Value) ? null : (string)ds.Tables[0].Rows[0]["Description"],
+                    Id = (int)ds.Tables[0].Rows[i]["Id"],
+                    Name = (string)ds.Tables[0].Rows[i]["Name"],
+                    Description = (ds.Tables[0].Rows[i]["Description"] == DBNull.Value) ? null : (string)ds.Tables[0].Rows[i]["Description"],
                 };
+
+                result.Add(item);
             }
-        }
 
-        public async Task<IList<PositionEntity>> ListAsync()
-        {
-            string query = "SELECT * FROM Position";
-
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-
-                SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-                DataSet ds = new DataSet();
-                adapter.Fill(ds);
-
-                if (ds.Tables[0].Rows.Count == 0)
-                {
-                    return new List<PositionEntity>();
-                }
-
-                List<PositionEntity> result = new List<PositionEntity>();
-
-                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                {
-                    var item = new PositionEntity()
-                    {
-                        Id = (int)ds.Tables[0].Rows[i]["Id"],
-                        Name = (string)ds.Tables[0].Rows[i]["Name"],
-                        Description = (ds.Tables[0].Rows[i]["Description"] == DBNull.Value) ? null : (string)ds.Tables[0].Rows[i]["Description"],
-                    };
-
-                    result.Add(item);
-                }
-
-                return result;
-            }
+            return result;
         }
     }
 }

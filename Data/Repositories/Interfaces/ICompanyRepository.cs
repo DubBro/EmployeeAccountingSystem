@@ -1,7 +1,6 @@
-﻿namespace EmployeeAccountingSystem.Data.Repositories.Interfaces
+﻿namespace EmployeeAccountingSystem.Data.Repositories.Interfaces;
+
+public interface ICompanyRepository
 {
-    public interface ICompanyRepository
-    {
-        Task<CompanyEntity> GetAsync(int id = 1);
-    }
+    Task<CompanyEntity> GetAsync(int id = 1);
 }

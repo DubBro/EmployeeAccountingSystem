@@ -1,58 +1,58 @@
-﻿namespace EmployeeAccountingSystem.Controllers
+﻿namespace EmployeeAccountingSystem.Controllers;
+
+public class DepartmentController : Controller
 {
-    public class DepartmentController : Controller
+    private readonly IDepartmentService _departmentService;
+    private readonly IEmployeeService _employeeService;
+    private readonly IMapper _mapper;
+    private readonly ILogger<DepartmentController> _logger;
+
+    public DepartmentController(
+        IDepartmentService departmentService,
+        IEmployeeService employeeService,
+        IMapper mapper,
+        ILogger<DepartmentController> logger)
     {
-        private readonly IDepartmentService _departmentService;
-        private readonly IEmployeeService _employeeService;
-        private readonly IMapper _mapper;
-        private readonly ILogger<DepartmentController> _logger;
+        _departmentService = departmentService;
+        _employeeService = employeeService;
+        _mapper = mapper;
+        _logger = logger;
+    }
 
-        public DepartmentController(
-            IDepartmentService departmentService,
-            IEmployeeService employeeService,
-            IMapper mapper,
-            ILogger<DepartmentController> logger)
+    // TODO: make exception middleware and remove repeatable try...catch
+    [HttpGet]
+    public async Task<IActionResult> Index()
+    {
+        try
         {
-            _departmentService = departmentService;
-            _employeeService = employeeService;
-            _mapper = mapper;
-            _logger = logger;
+            var result = await _departmentService.ListDepartmentsInfoAsync();
+            _logger.LogInformation($"Departments (count = {result.Count}) were received");
+            return View(result.Select(e => _mapper.Map<DepartmentInfoViewModel>(e)).ToList());
         }
-
-        [HttpGet]
-        public async Task<IActionResult> Index()
+        catch (Exception ex)
         {
-            try
-            {
-                var result = await _departmentService.ListDepartmentsInfoAsync();
-                _logger.LogInformation($"Departments (count = {result.Count}) were received");
-                return View(result.Select(e => _mapper.Map<DepartmentInfoViewModel>(e)).ToList());
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message, ex);
-                return View("Error");
-            }
+            _logger.LogError(ex.Message, ex);
+            return View("Error");
         }
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> Get(int id)
+    [HttpPost]
+    public async Task<IActionResult> Get(int id)
+    {
+        try
         {
-            try
-            {
-                var department = await _departmentService.GetAsync(id);
-                ViewData["Department"] = _mapper.Map<DepartmentViewModel>(department);
+            var department = await _departmentService.GetAsync(id);
+            ViewData["Department"] = _mapper.Map<DepartmentViewModel>(department);
 
-                EmployeeFilterRequest filter = new EmployeeFilterRequest() { Department = id };
-                var result = await _employeeService.ListFilteredAsync(_mapper.Map<EmployeeFilterDTO>(filter));
+            EmployeeFilterRequest filter = new EmployeeFilterRequest() { Department = id };
+            var result = await _employeeService.ListFilteredAsync(_mapper.Map<EmployeeFilterDTO>(filter));
 
-                return View("DepartmentDetails", result.Select(e => _mapper.Map<EmployeeViewModel>(e)).ToList());
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message, ex);
-                return View("Error");
-            }
+            return View("DepartmentDetails", result.Select(e => _mapper.Map<EmployeeViewModel>(e)).ToList());
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message, ex);
+            return View("Error");
         }
     }
 }

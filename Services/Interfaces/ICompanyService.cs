@@ -1,7 +1,6 @@
-﻿namespace EmployeeAccountingSystem.Services.Interfaces
+﻿namespace EmployeeAccountingSystem.Services.Interfaces;
+
+public interface ICompanyService
 {
-    public interface ICompanyService
-    {
-        Task<CompanyDTO> GetAsync(int id = 1);
-    }
+    Task<CompanyDTO> GetAsync(int id = 1);
 }

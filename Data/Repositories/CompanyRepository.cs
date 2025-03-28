@@ -1,42 +1,41 @@
-﻿namespace EmployeeAccountingSystem.Data.Repositories
+﻿using EmployeeAccountingSystem.Utils.Extensions;
+
+namespace EmployeeAccountingSystem.Data.Repositories;
+
+public class CompanyRepository : BaseRepository, ICompanyRepository
 {
-    public class CompanyRepository : ICompanyRepository
+    public CompanyRepository(IOptions<Config> options)
+        : base(options)
     {
-        private readonly string _connectionString;
+    }
 
-        public CompanyRepository(IOptions<Config> options)
+    public async Task<CompanyEntity> GetAsync(int id = 1)
+    {
+        var query = "SELECT * FROM Company WHERE Id = @id";
+
+        using (var connection = new SqlConnection(GetConnectionString()))
         {
-            _connectionString = options.Value.ConnectionString;
-        }
+            await connection.OpenAsync();
 
-        public async Task<CompanyEntity> GetAsync(int id = 1)
-        {
-            string query = "SELECT * FROM Company WHERE Id = @id";
+            var command = new SqlCommand(query, connection);
 
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            command.AddParameter("@id", id);
+
+            var adapter = new SqlDataAdapter(command);
+            var ds = new DataSet();
+            adapter.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count == 0)
             {
-                await connection.OpenAsync();
-
-                SqlCommand command = new SqlCommand(query, connection);
-                SqlParameter paramId = new SqlParameter("@id", id);
-                command.Parameters.Add(paramId);
-
-                SqlDataAdapter adapter = new SqlDataAdapter(command);
-                DataSet ds = new DataSet();
-                adapter.Fill(ds);
-
-                if (ds.Tables[0].Rows.Count == 0)
-                {
-                    return new CompanyEntity();
-                }
-
-                return new CompanyEntity
-                {
-                    Id = (int)ds.Tables[0].Rows[0]["Id"],
-                    Name = (string)ds.Tables[0].Rows[0]["Name"],
-                    Description = (string)ds.Tables[0].Rows[0]["Description"],
-                };
+                return new CompanyEntity();
             }
+
+            return new CompanyEntity
+            {
+                Id = (int)ds.Tables[0].Rows[0]["Id"],
+                Name = (string)ds.Tables[0].Rows[0]["Name"],
+                Description = (string)ds.Tables[0].Rows[0]["Description"],
+            };
         }
     }
 }
