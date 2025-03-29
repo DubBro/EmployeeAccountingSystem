@@ -17,7 +17,7 @@ public static class BllServiceCollectionExtensions
     {
         services.AddScoped<ICompanyService, CompanyService>();
         services.AddScoped<IDepartmentService, DepartmentService>();
-        services.AddScoped<IEmployeeService, IEmployeeService>();
+        services.AddScoped<IEmployeeService, EmployeeService>();
         services.AddScoped<IPositionService, PositionService>();
     }
 
