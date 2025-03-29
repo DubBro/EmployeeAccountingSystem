@@ -1,4 +1,9 @@
-﻿namespace EmployeeAccountingSystem.Services;
+﻿using AutoMapper;
+using EmployeeAccountingSystem.BLL.Models;
+using EmployeeAccountingSystem.BLL.Services.Interfaces;
+using EmployeeAccountingSystem.DAL.Repositories.Interfaces;
+
+namespace EmployeeAccountingSystem.BLL.Services;
 
 public class CompanyService : ICompanyService
 {
@@ -11,9 +16,9 @@ public class CompanyService : ICompanyService
         _mapper = mapper;
     }
 
-    public async Task<CompanyDTO> GetAsync(int id = 1)
+    public async Task<CompanyModel> GetAsync(int id = 1)
     {
         var result = await _companyRepository.GetAsync(id);
-        return _mapper.Map<CompanyDTO>(result);
+        return _mapper.Map<CompanyModel>(result);
     }
 }

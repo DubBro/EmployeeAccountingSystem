@@ -45,7 +45,7 @@ public class EmployeeRepository : BaseRepository, IEmployeeRepository
         }
     }
 
-    public async Task<IList<EmployeeEntity>> ListAsync()
+    public async Task<ICollection<EmployeeEntity>> ListAsync()
     {
         var query = "SELECT " +
                         "e.Id, e.FirstName, e.LastName, e.MiddleName, e.BirthDate, " +
@@ -82,7 +82,7 @@ public class EmployeeRepository : BaseRepository, IEmployeeRepository
     }
 
     // TODO: refactor dublicates in this method
-    public async Task<IList<EmployeeEntity>> ListFilteredAsync(EmployeeFilter filter)
+    public async Task<ICollection<EmployeeEntity>> ListFilteredAsync(EmployeeFilter filter)
     {
         var query = new StringBuilder("SELECT " +
                                             "e.Id, e.FirstName, e.LastName, e.MiddleName, e.BirthDate, " +

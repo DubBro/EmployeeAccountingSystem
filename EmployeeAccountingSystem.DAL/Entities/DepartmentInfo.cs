@@ -1,5 +1,6 @@
 ﻿namespace EmployeeAccountingSystem.DAL.Entities;
 
+// TODO: this is not an entity
 public class DepartmentInfo : DepartmentEntity
 {
     public int EmployeeCount { get; set; }

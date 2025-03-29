@@ -1,4 +1,9 @@
-﻿namespace EmployeeAccountingSystem.Services;
+﻿using AutoMapper;
+using EmployeeAccountingSystem.BLL.Models;
+using EmployeeAccountingSystem.BLL.Services.Interfaces;
+using EmployeeAccountingSystem.DAL.Repositories.Interfaces;
+
+namespace EmployeeAccountingSystem.BLL.Services;
 
 public class PositionService : IPositionService
 {
@@ -11,15 +16,15 @@ public class PositionService : IPositionService
         _mapper = mapper;
     }
 
-    public async Task<PositionDTO> GetAsync(int id)
+    public async Task<PositionModel> GetAsync(int id)
     {
         var result = await _positionRepository.GetAsync(id);
-        return _mapper.Map<PositionDTO>(result);
+        return _mapper.Map<PositionModel>(result);
     }
 
-    public async Task<IList<PositionDTO>> ListAsync()
+    public async Task<ICollection<PositionModel>> ListAsync()
     {
         var result = await _positionRepository.ListAsync();
-        return result.Select(p => _mapper.Map<PositionDTO>(p)).ToList();
+        return result.Select(p => _mapper.Map<PositionModel>(p)).ToList();
     }
 }

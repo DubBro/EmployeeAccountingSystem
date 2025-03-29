@@ -47,7 +47,7 @@ public class PositionRepository : BaseRepository, IPositionRepository
         }
     }
 
-    public async Task<IList<PositionEntity>> ListAsync()
+    public async Task<ICollection<PositionEntity>> ListAsync()
     {
         var query = "SELECT * FROM Position";
 

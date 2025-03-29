@@ -1,7 +1,9 @@
-﻿namespace EmployeeAccountingSystem.Services.Interfaces;
+﻿using EmployeeAccountingSystem.BLL.Models;
+
+namespace EmployeeAccountingSystem.BLL.Services.Interfaces;
 
 public interface IPositionService
 {
-    Task<PositionDTO> GetAsync(int id);
-    Task<IList<PositionDTO>> ListAsync();
+    Task<PositionModel> GetAsync(int id);
+    Task<ICollection<PositionModel>> ListAsync();
 }

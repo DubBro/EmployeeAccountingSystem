@@ -112,7 +112,7 @@ public class EmployeeController : Controller
     {
         try
         {
-            var result = await _employeeService.AddAsync(_mapper.Map<EmployeeDTO>(employee));
+            var result = await _employeeService.AddAsync(_mapper.Map<EmployeeModel>(employee));
             _logger.LogInformation($"Employee with id = {result} was added");
             return View("AddEmployeeSuccess");
         }
@@ -133,7 +133,7 @@ public class EmployeeController : Controller
     {
         try
         {
-            var result = await _employeeService.UpdateAsync(_mapper.Map<EmployeeDTO>(employee));
+            var result = await _employeeService.UpdateAsync(_mapper.Map<EmployeeModel>(employee));
             _logger.LogInformation($"Employee with id = {result} was updated");
             return View("UpdateEmployeeSuccess");
         }

@@ -1,6 +1,6 @@
-﻿namespace EmployeeAccountingSystem.Models.DTOs;
+﻿namespace EmployeeAccountingSystem.BLL.Models;
 
-public class EmployeeFilterDTO
+public class EmployeeFilterModel
 {
     public string? Name { get; set; }
     public string? Country { get; set; }

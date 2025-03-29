@@ -47,7 +47,7 @@ public class DepartmentRepository : BaseRepository, IDepartmentRepository
         }
     }
 
-    public async Task<IList<DepartmentEntity>> ListAsync()
+    public async Task<ICollection<DepartmentEntity>> ListAsync()
     {
         var query = "SELECT * FROM Department";
 
@@ -84,7 +84,7 @@ public class DepartmentRepository : BaseRepository, IDepartmentRepository
         }
     }
 
-    public async Task<IList<DepartmentInfo>> ListDepartmentsInfoAsync()
+    public async Task<ICollection<DepartmentInfo>> ListDepartmentsInfoAsync()
     {
         var query = "SELECT " +
                         "d.Id, d.Name, d.Description, COUNT(e.Id) AS EmployeeCount, " +

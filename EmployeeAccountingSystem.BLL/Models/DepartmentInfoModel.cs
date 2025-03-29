@@ -1,6 +1,6 @@
-﻿namespace EmployeeAccountingSystem.Models.DTOs;
+﻿namespace EmployeeAccountingSystem.BLL.Models;
 
-public class DepartmentInfoDTO : DepartmentDTO
+public class DepartmentInfoModel : DepartmentModel
 {
     public int EmployeeCount { get; set; }
     public decimal SumSalary { get; set; }

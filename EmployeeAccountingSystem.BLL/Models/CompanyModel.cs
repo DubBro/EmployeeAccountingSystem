@@ -1,6 +1,6 @@
-﻿namespace EmployeeAccountingSystem.Models.DTOs;
+﻿namespace EmployeeAccountingSystem.BLL.Models;
 
-public class CompanyDTO
+public class CompanyModel
 {
     public int Id { get; set; }
     public string Name { get; set; } = null!;

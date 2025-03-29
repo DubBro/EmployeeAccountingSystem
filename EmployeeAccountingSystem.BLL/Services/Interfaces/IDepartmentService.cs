@@ -1,8 +1,10 @@
-﻿namespace EmployeeAccountingSystem.Services.Interfaces;
+﻿using EmployeeAccountingSystem.BLL.Models;
+
+namespace EmployeeAccountingSystem.BLL.Services.Interfaces;
 
 public interface IDepartmentService
 {
-    Task<DepartmentDTO> GetAsync(int id);
-    Task<IList<DepartmentDTO>> ListAsync();
-    Task<IList<DepartmentInfoDTO>> ListDepartmentsInfoAsync();
+    Task<DepartmentModel> GetAsync(int id);
+    Task<ICollection<DepartmentModel>> ListAsync();
+    Task<ICollection<DepartmentInfoModel>> ListDepartmentsInfoAsync();
 }

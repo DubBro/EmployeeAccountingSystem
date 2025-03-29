@@ -1,11 +1,13 @@
-﻿namespace EmployeeAccountingSystem.Services.Interfaces;
+﻿using EmployeeAccountingSystem.BLL.Models;
+
+namespace EmployeeAccountingSystem.BLL.Services.Interfaces;
 
 public interface IEmployeeService
 {
-    Task<EmployeeDTO> GetAsync(int id);
-    Task<IList<EmployeeDTO>> ListAsync();
-    Task<IList<EmployeeDTO>> ListFilteredAsync(EmployeeFilterDTO filter);
-    Task<int> AddAsync(EmployeeDTO employeeDTO);
-    Task<int> UpdateAsync(EmployeeDTO employeeDTO);
+    Task<EmployeeModel> GetAsync(int id);
+    Task<ICollection<EmployeeModel>> ListAsync();
+    Task<ICollection<EmployeeModel>> ListFilteredAsync(EmployeeFilterModel filter);
+    Task<int> AddAsync(EmployeeModel employeeModel);
+    Task<int> UpdateAsync(EmployeeModel employeeModel);
     Task<int> DeleteAsync(int id);
 }

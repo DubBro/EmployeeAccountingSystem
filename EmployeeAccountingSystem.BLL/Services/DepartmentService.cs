@@ -1,4 +1,9 @@
-﻿namespace EmployeeAccountingSystem.Services;
+﻿using AutoMapper;
+using EmployeeAccountingSystem.BLL.Models;
+using EmployeeAccountingSystem.BLL.Services.Interfaces;
+using EmployeeAccountingSystem.DAL.Repositories.Interfaces;
+
+namespace EmployeeAccountingSystem.BLL.Services;
 
 public class DepartmentService : IDepartmentService
 {
@@ -11,21 +16,21 @@ public class DepartmentService : IDepartmentService
         _mapper = mapper;
     }
 
-    public async Task<DepartmentDTO> GetAsync(int id)
+    public async Task<DepartmentModel> GetAsync(int id)
     {
         var result = await _departmentRepository.GetAsync(id);
-        return _mapper.Map<DepartmentDTO>(result);
+        return _mapper.Map<DepartmentModel>(result);
     }
 
-    public async Task<IList<DepartmentDTO>> ListAsync()
+    public async Task<ICollection<DepartmentModel>> ListAsync()
     {
         var result = await _departmentRepository.ListAsync();
-        return result.Select(d => _mapper.Map<DepartmentDTO>(d)).ToList();
+        return result.Select(d => _mapper.Map<DepartmentModel>(d)).ToList();
     }
 
-    public async Task<IList<DepartmentInfoDTO>> ListDepartmentsInfoAsync()
+    public async Task<ICollection<DepartmentInfoModel>> ListDepartmentsInfoAsync()
     {
         var result = await _departmentRepository.ListDepartmentsInfoAsync();
-        return result.Select(d => _mapper.Map<DepartmentInfoDTO>(d)).ToList();
+        return result.Select(d => _mapper.Map<DepartmentInfoModel>(d)).ToList();
     }
 }

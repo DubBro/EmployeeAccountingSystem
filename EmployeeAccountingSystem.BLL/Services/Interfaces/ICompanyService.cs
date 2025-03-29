@@ -1,6 +1,8 @@
-﻿namespace EmployeeAccountingSystem.Services.Interfaces;
+﻿using EmployeeAccountingSystem.BLL.Models;
+
+namespace EmployeeAccountingSystem.BLL.Services.Interfaces;
 
 public interface ICompanyService
 {
-    Task<CompanyDTO> GetAsync(int id = 1);
+    Task<CompanyModel> GetAsync(int id = 1);
 }
