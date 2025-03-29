@@ -21,7 +21,7 @@ public static class BllServiceCollectionExtensions
         services.AddScoped<IPositionService, PositionService>();
     }
 
-    public static void AddBllMappingProfiles(this IMapperConfigurationExpression configuration)
+    public static void AddBllMaps(this IMapperConfigurationExpression configuration)
     {
         configuration.AddMaps(typeof(BllServiceCollectionExtensions));
     }

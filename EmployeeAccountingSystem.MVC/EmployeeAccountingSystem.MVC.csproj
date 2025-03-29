@@ -4,6 +4,35 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <CodeAnalysisRuleSet>../settings.ruleset</CodeAnalysisRuleSet>
+        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\EmployeeAccountingSystem.BLL\EmployeeAccountingSystem.BLL.csproj" />
+      <ProjectReference Include="..\EmployeeAccountingSystem.Shared\EmployeeAccountingSystem.Shared.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Views\Department\DepartmentDetails.cshtml" />
+      <AdditionalFiles Include="Views\Department\Index.cshtml" />
+      <AdditionalFiles Include="Views\Employee\AddEmployeeForm.cshtml" />
+      <AdditionalFiles Include="Views\Employee\AddEmployeeSuccess.cshtml" />
+      <AdditionalFiles Include="Views\Employee\DeleteEmployeeSuccess.cshtml" />
+      <AdditionalFiles Include="Views\Employee\EmployeeCard.cshtml" />
+      <AdditionalFiles Include="Views\Employee\Index.cshtml" />
+      <AdditionalFiles Include="Views\Employee\UpdateEmployeeSuccess.cshtml" />
+      <AdditionalFiles Include="Views\Home\Index.cshtml" />
+      <AdditionalFiles Include="Views\Shared\Error.cshtml" />
+      <AdditionalFiles Include="Views\Shared\InvalidDataError.cshtml" />
+      <AdditionalFiles Include="Views\Shared\_Layout.cshtml" />
+    </ItemGroup>
 
 </Project>

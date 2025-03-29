@@ -1,31 +1,37 @@
-using System.Diagnostics;
+using AutoMapper;
+using EmployeeAccountingSystem.BLL.Services.Interfaces;
+using EmployeeAccountingSystem.MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using EmployeeAccountingSystem.MVC.Models;
 
-namespace EmployeeAccountingSystem.MVC.Controllers;
+namespace EmployeeAccountingSystem.Controllers;
 
 public class HomeController : Controller
 {
+    private readonly ICompanyService _companyService;
+    private readonly IMapper _mapper;
     private readonly ILogger<HomeController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ICompanyService companyService, IMapper mapper, ILogger<HomeController> logger)
     {
+        _companyService = companyService;
+        _mapper = mapper;
         _logger = logger;
     }
 
-    public IActionResult Index()
+    // TODO: make exception middleware and remove repeatable try...catch
+    [HttpGet]
+    public async Task<IActionResult> Index()
     {
-        return View();
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        try
+        {
+            var result = await _companyService.GetAsync();
+            _logger.LogInformation($"Company '{result.Name}' with id = {result.Id} was received");
+            return View(_mapper.Map<CompanyViewModel>(result));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message, ex);
+            return View("Error");
+        }
     }
 }

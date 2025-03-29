@@ -15,6 +15,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeAccountingSystem.BLL", "EmployeeAccountingSystem.BLL\EmployeeAccountingSystem.BLL.csproj", "{53EF396E-3F30-483E-83D1-EFD4F004CE7A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeAccountingSystem.MVC", "EmployeeAccountingSystem.MVC\EmployeeAccountingSystem.MVC.csproj", "{2D2CC0FF-CAD3-4523-9911-276E47316968}"
+	ProjectSection(ProjectDependencies) = postProject
+		{53EF396E-3F30-483E-83D1-EFD4F004CE7A} = {53EF396E-3F30-483E-83D1-EFD4F004CE7A}
+		{20430B83-B130-4D87-BCE7-6EB370906AA8} = {20430B83-B130-4D87-BCE7-6EB370906AA8}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
