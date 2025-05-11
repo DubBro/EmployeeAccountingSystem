@@ -26,7 +26,6 @@ public class DepartmentController : Controller
         _logger = logger;
     }
 
-    // TODO: make exception middleware and remove repeatable try...catch
     [HttpGet]
     public async Task<IActionResult> Index()
     {

@@ -5,7 +5,7 @@ using EmployeeAccountingSystem.MVC.ViewModels;
 using EmployeeAccountingSystem.MVC.ViewModels.Requests;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EmployeeAccountingSystem.Controllers;
+namespace EmployeeAccountingSystem.MVC.Controllers;
 
 public class EmployeeController : Controller
 {
@@ -29,7 +29,6 @@ public class EmployeeController : Controller
         _logger = logger;
     }
 
-    // TODO: make exception middleware and remove repeatable try...catch
     [HttpGet]
     public async Task<IActionResult> Index()
     {

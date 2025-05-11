@@ -32,7 +32,6 @@ public class EmployeeService : IEmployeeService
 
     public async Task<ICollection<EmployeeModel>> ListFilteredAsync(EmployeeFilterModel filter)
     {
-        // TODO: create method HasAnyValue() and place second part of this check there.
         if (filter == null ||
             (string.IsNullOrEmpty(filter.Name) && string.IsNullOrEmpty(filter.Country) && string.IsNullOrEmpty(filter.City) &&
             filter.MinSalary <= 0 && filter.MaxSalary <= 0 && filter.Department <= 0 && filter.Position <= 0))
@@ -67,7 +66,6 @@ public class EmployeeService : IEmployeeService
         return await _employeeRepository.DeleteAsync(id);
     }
 
-    // TODO: mb refactor this, and also place into EmployeeModel?
     private static void ValidateEmployee(EmployeeModel employeeModel)
     {
         if (employeeModel == null)
